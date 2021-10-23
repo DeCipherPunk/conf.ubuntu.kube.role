@@ -1,0 +1,49 @@
+---
+# tasks file for conf.ubuntu.kube.role
+- name: Ensure Prequisits
+  apt:
+    name:
+      - apt-transport-https 
+      - ca-certificates
+    state: present
+    update_cache: yes
+    autoclean: yes
+
+- name: Kubernetes gpg
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- name: Kubernetes repository
+  apt_repository:
+    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+    update_cache: true
+
+- name: Install Kubernetes 
+  apt:
+    name:
+      - kubeadm
+      - kubectl
+      - kubelet
+    state: present
+    update_cache: true
+    autoclean: yes
+
+- name: Hold kubeadm package updates
+  dpkg_selections:
+    name: kubeadm
+    selection: hold
+
+- name: Hold kubelet package updates
+  dpkg_selections:
+    name: kubectl
+    selection: hold
+
+- name: Hold kubectl package updates
+  dpkg_selections:
+    name: kubectl
+    selection: hold
+  
+    
+
